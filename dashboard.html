@@ -928,7 +928,7 @@ const weatherImages = {
 
 window.onload = async () => {
   try {
-    const response = await fetch('https://scada.windworldindia.com/weather/GetWecDetails?Locno=4111');
+    const response = await fetch('/get_hierarchy');
     const hierarchy = await response.json();
 
     // Get references to DOM elements
