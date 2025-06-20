@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🌦️ Weather Map</title>
+  <title>🌦️ SCADA Weather Forecast</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -25,7 +25,7 @@
       position: relative;
       padding: 20px;
       transition: background 1.5s ease;
-      background: linear-gradient(135deg, #1a2a6c, #87b49b, #115c4b);
+      background: linear-gradient(135deg, #1a2a6c, #189450, #001510);
       background-size: 400% 400%;
       animation: gradientBG 15s ease infinite;
     }
@@ -155,7 +155,7 @@
       flex: 0 0 auto;
       transition: all 0.3s ease;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 5px 15px rgba(17, 91, 62, 0.1);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -164,8 +164,8 @@
 
     .mini-card:hover {
       transform: translateY(-10px) scale(1.05);
-      background: rgba(9, 158, 66, 0.15);
-      box-shadow: 0 8px 25px rgba(33, 162, 102, 0.2);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
     }
 
     .mini-card.active {
@@ -328,7 +328,7 @@
     }
 
     .location-refresh:hover {
-      color: #a13333;
+      color: #fff;
       background: rgba(255, 255, 255, 0.15);
       transform: translateY(-2px);
       box-shadow: 0 6px 15px rgba(0,0,0,0.15);
@@ -387,20 +387,6 @@
       margin-top: 10px;
       font-size: 1.2rem;
       opacity: 0.9;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      flex-direction: column;
-    }
-
-    .location-name:hover {
-      color: #a0d2ff;
-    }
-
-    .location-area {
-      font-size: 0.9rem;
-      opacity: 0.8;
-      font-weight: 300;
-      margin-top: 3px;
     }
 
     .time-date {
@@ -493,72 +479,145 @@
     .location-info i {
       color: #00c6ff;
     }
-
-    .map-container {
-      display: block;
-      width: 100%;
-      height: 350px;
-      border-radius: 15px;
-      overflow: hidden;
-      margin-top: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    }
-
-    #map {
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-    }
-
-    .map-header {
+    
+    /* SCADA specific styles */
+    .scada-form {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+      width: 100%;
     }
-
-    .map-header h3 {
-      font-size: 1.3rem;
+    
+    .form-group {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 8px;
+      min-width: 200px;
     }
-
-    .map-toggle {
+    
+    .form-group label {
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+    
+    .form-group select {
+      width: 100%;
+      padding: 12px 20px;
+      border-radius: 50px;
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: white;
-      padding: 6px 15px;
-      border-radius: 20px;
+      font-size: 1rem;
+      backdrop-filter: blur(5px);
       cursor: pointer;
-      font-size: 0.9rem;
+      outline: none;
       transition: all 0.3s ease;
     }
-
-    .map-toggle:hover {
+    
+    .form-group select:hover {
       background: rgba(255, 255, 255, 0.15);
     }
-
-    .map-close {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+    
+    .form-group select option {
+      background: rgba(30, 30, 30, 0.9);
       color: white;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      font-size: 1.2rem;
-      z-index: 100;
     }
-
-    .map-close:hover {
-      background: rgba(255, 0, 0, 0.3);
+    
+    .scada-btn {
+      background: linear-gradient(45deg, #0072ff, #00c6ff);
+      color: white;
+      padding: 12px 35px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 30px;
+    }
+    
+    .scada-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      background: linear-gradient(45deg, #0062e0, #00b8e6);
+    }
+    
+    .scada-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .state-weather-container {
+      width: 100%;
+      margin-top: 30px;
+    }
+    
+    .state-weather-title {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .state-weather-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      border-radius: 2px;
+    }
+    
+    .state-forecast-row {
+      display: flex;
+      overflow-x: auto;
+      gap: 15px;
+      padding: 15px;
+      margin-top: 10px;
+    }
+    
+    .scada-mini-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      padding: 15px;
+      border-radius: 18px;
+      text-align: center;
+      min-width: 150px;
+      flex: 0 0 auto;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .scada-mini-card h4 {
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+    
+    .scada-mini-card .temp {
+      font-size: 1.8rem;
+      margin: 10px 0;
+      font-weight: 600;
+    }
+    
+    .scada-mini-card .condition {
+      font-size: 1rem;
+      opacity: 0.9;
     }
 
     @media (max-width: 768px) {
@@ -598,8 +657,14 @@
         font-size: 2rem;
       }
       
-      .map-container {
-        height: 250px;
+      .scada-form {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .form-group {
+        width: 100%;
+        max-width: 300px;
       }
     }
 
@@ -642,149 +707,117 @@
         font-size: 0.9rem;
       }
       
-      .map-container {
-        height: 200px;
+      .state-weather-title {
+        font-size: 1.4rem;
       }
     }
-    
-    .dashboard-button-container-left {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      z-index: 1000;
-    }
-    
-    .fancy-button {
-      display: inline-flex;
-      align-items: center;
-      padding: 8px 15px;
-      background: linear-gradient(135deg, #4b6cb7, #182848);
-      color: #fff;
-      text-decoration: none;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 400;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-      transition: background 0.3s, transform 0.2s;
-    }
+    .weather-card {
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            overflow: hidden;
+        }
+        .weather-card:hover {
+            transform: translateY(-5px);
+        }
+        .state-header {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 15px 15px 0 0;
+        }
+        .forecast-day {
+            padding: 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .forecast-day:last-child {
+            border-bottom: none;
+        }
+        .weather-icon {
+            font-size: 2.5rem;
+            color: #4b6cb7;
+        }
+        .temp-high {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .temp-low {
+            color: #3498db;
+            font-weight: bold;
+        }
+        .wind-info {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        .no-data {
+            color: #95a5a6;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
 
-    .fancy-button:hover {
-      background: linear-gradient(135deg, #6b8cd7, #1a2b58);
-      transform: translateY(-2px);
-    }
-
-    .fancy-button .icon {
-      margin-right: 5px;
-      display: inline-block;
-      width: 20px;
-      height: 10px;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: contain;
-    }
-    
-    .instructions {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      padding: 15px;
-      margin-top: 20px;
-      text-align: center;
-      font-size: 0.9rem;
-      backdrop-filter: blur(5px);
-    }
-    
-    .status-indicator {
-      padding: 8px 15px;
-      border-radius: 50px;
-      font-size: 0.9rem;
-      margin-top: 10px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.1);
-    }
-    
-    .status-indicator.active {
-      background: rgba(46, 204, 113, 0.2);
-      color: #2ecc71;
-    }
-    
-    .status-indicator.inactive {
-      background: rgba(231, 76, 60, 0.2);
-      color: #e74c3c;
-    }
   </style>
-  
-  <!-- Leaflet CSS for maps -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-</head>
-<body role="main">
-  
-  <!-- Dashboard button -->
-  <div class="dashboard-button-container-left">
-    <a href="/dashboard" class="fancy-button">
-      <i class="fas fa-table"></i> Dashboard
-    </a>
-  </div>
+
   
   <!-- Main card -->
-  <div class="card" id="weatherCard">
-    <h2><i class="fas fa-map-marker-alt"></i>Weather Map</h2>
+  <div class="card" id="scadaCard">
+    <h2><i class="fas fa-search-location"></i> SCADA Weather</h2>
     
-    <div class="status-indicator" id="locationStatus">
-      <i class="fas fa-sync-alt fa-spin"></i>
-      <span>Detecting your location...</span>
-    </div>
+    <div class="scada-form">
+  <div class="form-group">
+    <label for="stateSelect">Select State</label>
+    <select id="stateSelect">
+      <option value="">-- Select State --</option>
+    </select>
+  </div>
+  
+  <!-- LOCATION SELECTOR NOW COMES BEFORE PLANT SELECTOR -->
+  <div class="form-group">
+    <label for="locSelect">Select Location</label>
+    <select id="locSelect" disabled>
+      <option value="">-- Select Location --</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label for="plantSelect">Select Plant</label>
+    <select id="plantSelect" disabled>
+      <option value="">-- Select Plant --</option>
+    </select>
+  </div>
+</div>
     
-    <div class="weather-image">
-      <img id="weatherConditionImage">
-    </div>
+    <button id="fetchDataBtn" class="scada-btn" disabled>
+      <i class="fas fa-cloud-sun"></i> Get Weather Data
+    </button>
     
-    <div class="info-block" id="infoText">
+    <div class="info-block" id="scadaInfoText">
       <div class="loading">
         <div class="loader"></div>
-        <div style="margin-left: 15px;">Loading weather information...</div>
+        <div style="margin-left: 15px;">Please select a state, plant and location...</div>
       </div>
     </div>
     
-    <div class="city-selector">
-      <select id="citySelect">
-        <option value="">Select an Indian City</option>
-        <option value="28.6139,77.2090">Delhi</option>
-        <option value="19.0760,72.8777">Mumbai</option>
-        <option value="13.0827,80.2707">Chennai</option>
-        <option value="12.9716,77.5946">Bangalore</option>
-        <option value="22.5726,88.3639">Kolkata</option>
-        <option value="17.3850,78.4867">Hyderabad</option>
-        <option value="26.9124,75.7873">Jaipur</option>
-        <option value="18.5204,73.8567">Pune</option>
-        <option value="23.0225,72.5714">Ahmedabad</option>
-        <option value="26.8467,80.9462">Lucknow</option>
-        <option value="30.7333,76.7794">Chandigarh</option>
-        <option value="31.5497,74.3436">Amritsar</option>
-      </select>
-    </div>
-    
-   
-    
-    <div class="map-container" id="mapContainer">
-      <div class="map-header">
-        <h3><i class="fas fa-map"></i> India Weather Map</h3>
-        <div id="mapCenterIndicator">Current Location</div>
-      </div>
-      <div id="map"></div>
-    </div>
+    <div class="dynamic-content">Click any day for detailed forecast</div>
     
     <div id="forecastContainer">
       <div id="forecastRow"></div>
     </div>
     
-    <button id="refreshLocationBtn" class="location-refresh">
-      <i class="fas fa-location-arrow"></i> Return to My Location
-    </button>
+    <div class="state-weather-container" id="stateWeatherContainer" style="display: none;">
+      <h3 class="state-weather-title">5-Day Forecast for <span id="stateName"></span></h3>
+      <div class="state-forecast-row" id="stateForecastRow"></div>
+    </div>
+    
+    <div id="viewDataLinkContainer" style="margin: 20px;">
+      <a href="/view_data" class="view-data-btn">
+        <i class="fas fa-table"></i>scada table
+      </a>
+    </div>
   </div>
-
-  <!-- Forecast Modal -->
+  
   <div id="modalOverlay" aria-hidden="true">
     <div id="modalContent">
       <h3 id="modalTitle">Detailed Forecast</h3>
@@ -793,35 +826,86 @@
     </div>
   </div>
 
-  <!-- Leaflet JS for maps -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   
+        
+       <div class="row">
+    {% for state in states %}
+    <div class="col-lg-6 col-xl-4">
+        <div class="weather-card">
+            <div class="state-header d-flex justify-content-between align-items-center">
+                <h3 class="mb-0"><i class="fas fa-location-dot me-2"></i>{{ state }}</h3>
+                <span class="badge bg-light text-dark"><i class="fas fa-calendar me-1"></i> {{ dates[0].strftime('%b %d') }} - {{ dates[-1].strftime('%b %d') }}</span>
+            </div>
+            
+            <div class="forecast-container">
+                {% for date in dates %}
+                <div class="forecast-day row align-items-center">
+                    <div class="col-3">
+                        <div class="fw-bold">{{ date.strftime('%a') }}</div>
+                        <div class="text-muted small">{{ date.strftime('%b %d') }}</div>
+                    </div>
+                    
+                    <div class="col-2 text-center">
+                        {% if state_data[state].get(date) %}
+                        <div class="weather-icon">
+                            <!-- Weather image instead of icon -->
+                            <img src="https://openweathermap.org/img/wn/{{ state_data[state][date].icon }}@2x.png" 
+                                 alt="{{ state_data[state][date].condition }}" 
+                                 class="img-fluid"
+                                 style="max-width: 60px;">
+                        </div>
+                        {% else %}
+                        <div class="weather-icon text-muted">
+                            <i class="fas fa-question"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-4">
+                        {% if state_data[state].get(date) %}
+                        <div class="condition mb-1">{{ state_data[state][date].condition }}</div>
+                        <div class="temps">
+                            <span class="temp-high">{{ state_data[state][date].tempmax }}°C</span> / 
+                            <span class="temp-low">{{ state_data[state][date].tempmin }}°C</span>
+                        </div>
+                        {% else %}
+                        <div class="text-muted">No data available</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-3">
+                        {% if state_data[state].get(date) %}
+                        <div class="wind-info">
+                            <i class="fas fa-wind me-1"></i> {{ state_data[state][date].windspeed }} km/h
+                        </div>
+                        <div class="wind-info">
+                            <i class="fas fa-compass me-1"></i> {{ state_data[state][date].winddir }}
+                        </div>
+                        <div class="wind-info">
+                            <i class="fas fa-tint me-1"></i> {{ state_data[state][date].humidity }}%
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
   <script>
-    const API_KEY = 'dca84481ac33e0245a1aafe304fab79a';
-    const infoText = document.getElementById('infoText');
-    const forecastRow = document.getElementById('forecastRow');
-    const modalOverlay = document.getElementById('modalOverlay');
-    const modalForecastList = document.getElementById('modalForecastList');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const refreshLocationBtn = document.getElementById('refreshLocationBtn');
-    const modalTitle = document.getElementById('modalTitle');
-    const weatherConditionImage = document.getElementById('weatherConditionImage');
-    const citySelect = document.getElementById('citySelect');
-    const mapContainer = document.getElementById('mapContainer');
-    const mapElement = document.getElementById('map');
-    const locationStatus = document.getElementById('locationStatus');
-    const mapCenterIndicator = document.getElementById('mapCenterIndicator');
+const stateSelect = document.getElementById('stateSelect');
+const locSelect = document.getElementById('locSelect');
+const plantSelect = document.getElementById('plantSelect');
 
-    let fullForecastData = [];
-    let currentWeatherData = null;
-    let lastCoords = null;
-    let map = null;
-    let marker = null;
-    let userLocation = null;
-    let isUserLocation = true;
+const fetchDataBtn = document.getElementById('fetchDataBtn');
+const forecastRow = document.getElementById('forecastRow');
+const scadaInfoText = document.getElementById('scadaInfoText');
 
-    // Weather images mapping for Indian conditions
-    const weatherImages = {
+
+const weatherImages = {
       '01d': 'https://images.unsplash.com/photo-1605556301821-0b38d2e7a218?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
       '01n': 'https://images.unsplash.com/photo-1533743983669-94fa5c4338ec?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
       '02d': 'https://images.unsplash.com/photo-1580193769210-b8d1c049a7d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
@@ -842,361 +926,128 @@
       '50n': 'https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
     };
 
-    function capitalize(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
+window.onload = async () => {
+  try {
+    const response = await fetch('https://scada.windworldindia.com/weather/GetWecDetails?Locno=4111');
+    const hierarchy = await response.json();
+
+    // Get references to DOM elements
+    const stateSelect = document.getElementById('stateSelect');
+    const locSelect = document.getElementById('locSelect');
+    const plantSelect = document.getElementById('plantSelect');
+    const fetchDataBtn = document.getElementById('fetchDataBtn');
+
+    // Populate State dropdown
+    for (let state in hierarchy) {
+      const option = document.createElement('option');
+      option.value = state;
+      option.textContent = state;
+      stateSelect.appendChild(option);
     }
 
-    function formatDateTime() {
-      const now = new Date();
-      return now.toLocaleString(undefined, {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-        hour: 'numeric', minute: '2-digit', hour12: true
-      });
-    }
+    stateSelect.addEventListener('change', () => {
+      locSelect.innerHTML = '<option value="">-- Select Location --</option>';
+      plantSelect.innerHTML = '<option value="">-- Select Plant --</option>';
+      locSelect.disabled = false;
+      plantSelect.disabled = true;
+      fetchDataBtn.disabled = true;
 
-    function getPrecipitation(item) {
-      return (item.rain?.['3h'] || item.snow?.['3h'] || 0).toFixed(1);
-    }
+      const selectedState = stateSelect.value;
+      if (!selectedState || !hierarchy[selectedState]) return;
 
-    function createMiniCardContent(item, dateLabel) {
-      const temp = Math.round(item.main.temp);
-      const iconCode = item.weather[0].icon;
-      const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-      
-      return `
-        <div><strong>${dateLabel}</strong></div>
-        <img src="${iconUrl}" alt="Weather icon" />
-        <div class="mini-info">${temp}°C</div>
-      `;
-    }
-
-    function updateWeatherImage(iconCode) {
-      const imageUrl = weatherImages[iconCode] || 'https://images.unsplash.com/photo-1469122312224-c5846569feb1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80';
-      weatherConditionImage.src = imageUrl;
-    }
-
-    function initMap() {
-      // Initialize map centered on India
-      map = L.map('map').setView([20.5937, 78.9629], 5);
-      
-      // Add tile layer
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
-      
-      // Add click event to map
-      map.on('click', function(e) {
-        isUserLocation = false;
-        mapCenterIndicator.textContent = "Selected Location";
-        updateWeather(e.latlng.lat, e.latlng.lng);
-        
-        // Update info text
-        infoText.innerHTML = `
-          <div class="loading">
-            <div class="loader"></div>
-            <div style="margin-left: 15px;">Loading weather for selected location...</div>
-          </div>
-        `;
-      });
-    }
-
-    function updateWeather(lat, lon) {
-      lastCoords = { lat, lon };
-      citySelect.value = '';
-      
-      // Remove existing marker if it exists
-      if (marker) {
-        map.removeLayer(marker);
-      }
-      
-      // Add new marker at clicked location
-      marker = L.marker([lat, lon]).addTo(map);
-      
-      // Get detailed location information from coordinates
-      fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`)
-        .then(res => res.json())
-        .then(locationData => {
-          // Extract detailed location information
-          const locality = locationData.locality || '';
-          const city = locationData.city || '';
-          const area = locationData.localityInfo && locationData.localityInfo.administrative && 
-                        locationData.localityInfo.administrative.length > 2 ? 
-                        locationData.localityInfo.administrative[2].name : '';
-          
-          // Construct display name with city and area
-          let locationName = '';
-          if (locality && city) {
-            locationName = `${locality}, ${city}`;
-          } else if (locality) {
-            locationName = locality;
-          } else if (city) {
-            locationName = city;
-          } else {
-            locationName = 'Unknown Location';
-          }
-          
-          // Add area if available and different from locality
-          let areaName = '';
-          if (area && area !== locality && area !== city) {
-            areaName = area;
-          }
-          
-          marker.bindPopup(`<b>${locationName}</b><br>${areaName ? areaName : ''}`).openPopup();
-          
-          // Update weather with detailed location information
-          fetchWeather(lat, lon, locationName, areaName);
-        })
-        .catch(() => {
-          // If reverse geocoding fails, get weather without detailed info
-          fetchWeather(lat, lon, 'Selected Location', '');
-        });
-    }
-
-    function fetchWeather(lat, lon, locationName, areaName) {
-      fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`)
-        .then(res => {
-          if (!res.ok) {
-            throw new Error('Weather data not available');
-          }
-          return res.json();
-        })
-        .then(data => {
-          currentWeatherData = data;
-          
-          // Update weather image
-          updateWeatherImage(data.weather[0].icon);
-          
-          // Display weather info with detailed location
-          displayWeatherInfo(data, locationName, areaName);
-          
-          // Update forecast
-          updateForecast(lat, lon);
-        })
-        .catch(() => {
-          infoText.textContent = 'Failed to fetch weather data. Please try again later.';
-        });
-    }
-
-    function displayWeatherInfo(data, locationName, areaName) {
-      const temp = Math.round(data.main.temp);
-      const iconCode = data.weather[0].icon;
-      const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-      
-      infoText.innerHTML = `
-        <div class="time-date">
-          <i class="fas fa-calendar-day"></i> ${formatDateTime()}
-        </div>
-        <div class="current-weather">
-          <img src="${iconUrl}" alt="Weather icon" style="width: 80px; height: 80px; margin: 0 10px;">
-          <div class="temp-display">${temp}°C</div>
-        </div>
-        <div class="location-name">
-          <div>${locationName}</div>
-          ${areaName ? `<div class="location-area">${areaName}</div>` : ''}
-        </div>
-      `;
-    }
-
-    function updateForecast(lat, lon) {
-      fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`)
-        .then(res => {
-          if (!res.ok) {
-            throw new Error('Forecast data not available');
-          }
-          return res.json();
-        })
-        .then(data => {
-          fullForecastData = data.list;
-          forecastRow.innerHTML = '';
-
-          const d = currentWeatherData;
-          const iconCode = d.weather[0].icon;
-          const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-          
-          const todayCard = document.createElement('div');
-          todayCard.className = 'mini-card active';
-          todayCard.innerHTML = `
-            <div><strong>Today</strong></div>
-            <img src="${iconUrl}" alt="Weather icon" />
-            <div class="mini-info">${Math.round(d.main.temp)}°C</div>
-          `;
-          todayCard.onclick = () => {
-            document.querySelectorAll('.mini-card').forEach(card => card.classList.remove('active'));
-            todayCard.classList.add('active');
-            showDetailedForecast('current');
-          };
-          forecastRow.appendChild(todayCard);
-
-          const addedDates = new Set();
-          fullForecastData.forEach(item => {
-            const date = new Date(item.dt_txt);
-            if (date.getHours() === 12) {
-              const dateLabel = date.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
-              if (!addedDates.has(dateLabel)) {
-                const miniCard = document.createElement('div');
-                miniCard.className = 'mini-card';
-                miniCard.innerHTML = createMiniCardContent(item, dateLabel);
-                miniCard.onclick = () => {
-                  document.querySelectorAll('.mini-card').forEach(card => card.classList.remove('active'));
-                  miniCard.classList.add('active');
-                  showDetailedForecast(dateLabel);
-                };
-                forecastRow.appendChild(miniCard);
-                addedDates.add(dateLabel);
-              }
-            }
-          });
-        })
-        .catch(() => {
-          infoText.textContent = 'Failed to load forecast data';
-        });
-    }
-
-    function showDetailedForecast(dayLabel) {
-      modalForecastList.innerHTML = '';
-      modalTitle.textContent = dayLabel === 'current' ? 'Current Weather Details' : `${dayLabel} Forecast`;
-
-      if (dayLabel === 'current') {
-        const d = currentWeatherData;
-        const condition = capitalize(d.weather[0].description);
-        const iconUrl = `https://openweathermap.org/img/wn/${d.weather[0].icon}@2x.png`;
-
-        modalForecastList.innerHTML = `
-          <div class="forecast-item">
-            <img src="${iconUrl}" alt="${condition}" style="width: 80px; height: 80px;">
-            <div>
-              <strong>Current Conditions</strong><br>
-              ${condition}<br>
-              Temperature: ${Math.round(d.main.temp)}°C<br>
-              Feels like: ${Math.round(d.main.feels_like)}°C<br>
-              Humidity: ${d.main.humidity}%<br>
-              Wind: ${d.wind.speed} m/s<br>
-              Pressure: ${d.main.pressure} hPa
-            </div>
-          </div>
-        `;
-      } else {
-        const items = fullForecastData.filter(item => {
-          const date = new Date(item.dt_txt);
-          const label = date.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
-          return label === dayLabel;
-        });
-
-        if (items.length === 0) {
-          modalForecastList.textContent = 'No detailed data available for this day.';
-        } else {
-          items.forEach(item => {
-            const time = new Date(item.dt_txt).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-            const condition = capitalize(item.weather[0].description);
-            const iconUrl = `https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`;
-            const gust = item.wind.gust ? `, Gust: ${item.wind.gust} m/s` : '';
-
-            modalForecastList.innerHTML += `
-              <div class="forecast-item">
-                <img src="${iconUrl}" alt="${condition}" style="width: 60px; height: 60px;">
-                <div>
-                  <strong>${time}</strong><br>
-                  ${condition}<br>
-                  Temp: ${Math.round(item.main.temp)}°C<br>
-                  Feels like: ${Math.round(item.main.feels_like)}°C<br>
-                  Humidity: ${item.main.humidity}%<br>
-                  Precipitation: ${getPrecipitation(item)} mm<br>
-                  Wind: ${item.wind.speed} m/s${gust}
-                </div>
-              </div>
-            `;
-          });
-        }
-      }
-
-      modalOverlay.style.display = 'flex';
-    }
-
-    // Function to get user's current location
-    function getCurrentLocation() {
-      locationStatus.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Detecting your location...';
-      locationStatus.className = 'status-indicator';
-      
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          position => {
-            const { latitude, longitude } = position.coords;
-            userLocation = { lat: latitude, lng: longitude };
-            isUserLocation = true;
-            mapCenterIndicator.textContent = "Your Current Location";
-            locationStatus.innerHTML = '<i class="fas fa-check-circle"></i> Using your current location';
-            locationStatus.classList.add('active');
-            
-            // Center map on user's location
-            map.setView([latitude, longitude], 10);
-            
-            // Update weather for current location
-            updateWeather(latitude, longitude);
-          },
-          error => {
-            console.error("Error getting location: ", error);
-            locationStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Location access denied. Using default location.';
-            locationStatus.classList.add('inactive');
-            
-            // Fallback to Delhi
-            mapCenterIndicator.textContent = "Default Location (Delhi)";
-            updateWeather(28.6139, 77.2090);
-          }
-        );
-      } else {
-        // Browser doesn't support Geolocation
-        locationStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Geolocation not supported. Using default location.';
-        locationStatus.classList.add('inactive');
-        
-        // Fallback to Delhi
-        mapCenterIndicator.textContent = "Default Location (Delhi)";
-        updateWeather(28.6139, 77.2090);
-      }
-    }
-
-    // Event listeners
-    closeModalBtn.onclick = () => modalOverlay.style.display = 'none';
-    modalOverlay.onclick = (e) => {
-      if (e.target === modalOverlay) modalOverlay.style.display = 'none';
-    };
-
-    refreshLocationBtn.onclick = () => {
-      if (userLocation) {
-        map.setView([userLocation.lat, userLocation.lng], 10);
-        mapCenterIndicator.textContent = "Your Current Location";
-        isUserLocation = true;
-        updateWeather(userLocation.lat, userLocation.lng);
-        
-        infoText.innerHTML = `
-          <div class="loading">
-            <div class="loader"></div>
-            <div style="margin-left: 15px;">Loading weather for your location...</div>
-          </div>
-        `;
-      } else {
-        getCurrentLocation();
-      }
-    };
-    
-    citySelect.addEventListener('change', function() {
-      if (this.value) {
-        const [lat, lon] = this.value.split(',').map(Number);
-        isUserLocation = false;
-        mapCenterIndicator.textContent = "Selected City";
-        updateWeather(lat, lon);
-        
-        infoText.innerHTML = `
-          <div class="loading">
-            <div class="loader"></div>
-            <div style="margin-left: 15px;">Loading weather for ${this.options[this.selectedIndex].text}...</div>
-          </div>
-        `;
+      // Populate Location dropdown based on State
+      for (let loc in hierarchy[selectedState]) {
+        const option = document.createElement('option');
+        option.value = loc;
+        option.textContent = `LOCNO ${loc}`;
+        locSelect.appendChild(option);
       }
     });
 
-    // Initialize the map and set default location
-    initMap();
-    getCurrentLocation();
-  </script>
+    locSelect.addEventListener('change', () => {
+      plantSelect.innerHTML = '<option value="">-- Select Plant --</option>';
+      plantSelect.disabled = false;
+      fetchDataBtn.disabled = true;
+
+      const selectedState = stateSelect.value;
+      const selectedLoc = locSelect.value;
+
+      if (!selectedState || !selectedLoc || !hierarchy[selectedState][selectedLoc]) return;
+
+      // MODIFIED: Add 1 to each plant number before displaying
+      const plants = hierarchy[selectedState][selectedLoc];
+      for (let plant in plants) {
+        const option = document.createElement('option');
+        
+        // Convert plant number to integer and add 1
+        const plantNumber = parseInt(plant);
+        const displayNumber = isNaN(plantNumber) ? plant : plantNumber + 1;
+        
+        option.value = plant;
+        option.textContent = displayNumber;
+        plantSelect.appendChild(option);
+      }
+    });
+
+    // Enable fetch button when plant is selected
+    plantSelect.addEventListener('change', () => {
+      fetchDataBtn.disabled = !plantSelect.value;
+    });
+
+  } catch (err) {
+    console.error("Error loading hierarchy:", err);
+  }
+};
+
+// Unified click handler for fetching weather
+fetchDataBtn.addEventListener('click', async () => {
+  const locno = locSelect.value;
+  const selectedState = stateSelect.value;
+
+  forecastRow.innerHTML = '';
+  scadaInfoText.innerHTML = `
+    <div class="loading">
+      <div class="loader"></div>
+      <div style="margin-left: 15px;">
+        Fetching weather for ${locno ? `location ${locno}` : `state ${selectedState}`}...
+      </div>
+    </div>
+  `;
+
+  try {
+    const endpoint = locno 
+      ? `/get_forecast?locno=${locno}`
+      : `/get_forecast_by_state?state=${selectedState}`;
+    const response = await fetch(endpoint);
+    const forecast = await response.json();
+
+    forecast.forEach(day => {
+      const card = document.createElement('div');
+      card.className = 'weather-card';
+      card.innerHTML = `
+        <h4>${day.day || day.date}</h4>
+        <img src="${weatherImages[day.icon] || weatherImages['01d']}" alt="${day.condition}">
+        
+        <p>${day.temp}°C</p>
+        <p>${day.condition}</p>
+      `;
+      forecastRow.appendChild(card);
+    });
+
+    scadaInfoText.innerHTML = `<i class="fas fa-check-circle"></i> Weather loaded successfully.`;
+
+  } catch (err) {
+    console.error("Error fetching forecast:", err);
+    scadaInfoText.innerHTML = `<span style="color:red;"><i class="fas fa-times-circle"></i> Failed to load weather data.</span>`;
+  }
+});
+// src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+
+
+
+
+</script>
+
+
 </body>
 </html>
