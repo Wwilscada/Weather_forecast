@@ -173,23 +173,6 @@
       transform: translateY(-5px);
       border: 1px solid rgba(0, 195, 255, 0.3);
     }
-.forecast-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-.forecast-card {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 1rem;
-  border-radius: 1rem;
-  width: 180px;
-  color: white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-}
-.wind-info {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-}
 
     .mini-card img {
       width: 60px;
@@ -890,41 +873,26 @@
                         {% endif %}
                     </div>
                     
- {% for state in states %}
-  <div class="state-weather">
-    <h3>{{ state }}</h3>
-    <p>{{ dates[0].strftime('%b %d') }} - {{ dates[-1].strftime('%b %d') }}</p>
-
-    <div class="forecast-grid">
-      {% for date in dates %}
-        {% set daily = state_data[state].get(date) %}
-        <div class="forecast-card">
-          <h4>{{ date.strftime('%a') }}</h4>
-          <p>{{ date.strftime('%b %d') }}</p>
-
-          {% if daily %}
-            <p><strong>{{ daily.condition }}</strong></p>
-            <p>{{ daily.tempmax }}°C / {{ daily.tempmin }}°C</p>
-
-            <div class="wind-info">
-              <i class="fas fa-wind me-1"></i> {{ daily.windspeed }} km/h
+                    <div class="col-3">
+                        {% if state_data[state].get(date) %}
+                        <div class="wind-info">
+                            <i class="fas fa-wind me-1"></i> {{ state_data[state][date].windspeed }} km/h
+                        </div>
+                        <div class="wind-info">
+                            <i class="fas fa-compass me-1"></i> {{ state_data[state][date].winddir }}
+                        </div>
+                        <div class="wind-info">
+                            <i class="fas fa-tint me-1"></i> {{ state_data[state][date].humidity }}%
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-            <div class="wind-info">
-              <i class="fas fa-compass me-1"></i> {{ daily.winddir }}
-            </div>
-            <div class="wind-info">
-              <i class="fas fa-tint me-1"></i> {{ daily.humidity }}%
-            </div>
-          {% else %}
-            <p>No data available</p>
-          {% endif %}
         </div>
-      {% endfor %}
     </div>
-  </div>
-{% endfor %}
-
-
+    {% endfor %}
+</div>
 
 
   <script>
@@ -960,7 +928,7 @@ const weatherImages = {
 
 window.onload = async () => {
   try {
-    const response = await fetch('/get_hierarchy');
+    const response = await fetch('https://scada.windworldindia.com/weather/GetWecDetails?Locno=4111');
     const hierarchy = await response.json();
 
     // Get references to DOM elements
