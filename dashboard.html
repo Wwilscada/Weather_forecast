@@ -845,55 +845,8 @@
                         <div class="text-muted small">{{ date.strftime('%b %d') }}</div>
                     </div>
                     
-                    <div class="col-2 text-center">
-                        {% if state_data[state].get(date) %}
-                        <div class="weather-icon">
-                            <!-- Weather image instead of icon -->
-                            <img src="https://openweathermap.org/img/wn/{{ state_data[state][date].icon }}@2x.png" 
-                                 alt="{{ state_data[state][date].condition }}" 
-                                 class="img-fluid"
-                                 style="max-width: 60px;">
-                        </div>
-                        {% else %}
-                        <div class="weather-icon text-muted">
-                            <i class="fas fa-question"></i>
-                        </div>
-                        {% endif %}
-                    </div>
-                    
-                    <div class="col-4">
-                        {% if state_data[state].get(date) %}
-                        <div class="condition mb-1">{{ state_data[state][date].condition }}</div>
-                        <div class="temps">
-                            <span class="temp-high">{{ state_data[state][date].tempmax }}°C</span> / 
-                            <span class="temp-low">{{ state_data[state][date].tempmin }}°C</span>
-                        </div>
-                        {% else %}
-                        <div class="text-muted">No data available</div>
-                        {% endif %}
-                    </div>
-                    
-                    <div class="col-3">
-                        {% if state_data[state].get(date) %}
-                        <div class="wind-info">
-                            <i class="fas fa-wind me-1"></i> {{ state_data[state][date].windspeed }} km/h
-                        </div>
-                        <div class="wind-info">
-                            <i class="fas fa-compass me-1"></i> {{ state_data[state][date].winddir }}
-                        </div>
-                        <div class="wind-info">
-                            <i class="fas fa-tint me-1"></i> {{ state_data[state][date].humidity }}%
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-
+               
+ 
 
   <script>
 const stateSelect = document.getElementById('stateSelect');
