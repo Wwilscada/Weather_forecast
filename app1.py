@@ -73,10 +73,10 @@ def fetch_weather_data(lat, lon):
     raise Exception("❌ All API keys failed.")
 
 
-@app.route('/dashboard')  # This defines the URL endpoint
+@app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')  # Renders your dashboard template
-
+    return render_template("dashboard.html", states=states, dates=dates, state_data=state_data)
+    
 @app.route("/")
 def home():
     return render_template("home.html")
