@@ -3,8 +3,10 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import pyodbc
 import requests
 from datetime import datetime, timedelta
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 app.secret_key = "secret"
 
 # Configuration
@@ -72,15 +74,14 @@ def fetch_weather_data(lat, lon):
             print(f"⚠️ API key failed: {key}")
     raise Exception("❌ All API keys failed.")
 
-
-@app.route('/dashboard')
-def dashboard():
-    return render_template("dashboard.html", states=states, dates=dates, state_data=state_data)
-    
 @app.route("/")
 def home():
     return render_template("home.html")
 
+@app.route("/dashboard")
+def dashboard():
+    # Dummy context: Replace with actual state data if required
+    return render_template("dashboard.html", states=[], state_data={}, dates=[])
 
 @app.route("/view_data")
 def view_data():
@@ -126,30 +127,6 @@ def get_forecast_by_state():
         })
     return jsonify(result)
 
-@app.route("/get_hierarchy")
-def get_hierarchy():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT DISTINCT State, LOCNO, PlantNo
-        FROM WEC_All_Data_2
-        WHERE State IS NOT NULL AND LOCNO IS NOT NULL AND PlantNo IS NOT NULL
-    """)
-    rows = cursor.fetchall()
-    conn.close()
-
-    hierarchy = {}
-    for state, loc, plant in rows:
-        if state not in hierarchy:
-            hierarchy[state] = {}
-        if loc not in hierarchy[state]:
-            hierarchy[state][loc] = []
-        if plant not in hierarchy[state][loc]:
-            hierarchy[state][loc].append(plant)
-    
-    return jsonify(hierarchy)
-
-
 @app.route("/get_forecast")
 def get_forecast():
     locno = request.args.get("locno")
@@ -177,7 +154,50 @@ def get_forecast():
         })
     return jsonify(forecast)
 
+@app.route("/get_hierarchy")
+def get_hierarchy():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT DISTINCT State, LOCNO, PlantNo
+        FROM WEC_All_Data_2
+        WHERE State IS NOT NULL AND LOCNO IS NOT NULL AND PlantNo IS NOT NULL
+    """)
+    rows = cursor.fetchall()
+    conn.close()
 
+    hierarchy = {}
+    for state, loc, plant in rows:
+        if state not in hierarchy:
+            hierarchy[state] = {}
+        if loc not in hierarchy[state]:
+            hierarchy[state][loc] = []
+        if plant not in hierarchy[state][loc]:
+            hierarchy[state][loc].append(plant)
+    
+    return jsonify(hierarchy)
+
+@app.route('/get_weather_by_location', methods=['GET'])
+def get_weather_by_location():
+    locno = request.args.get('locno')
+    plantno = request.args.get('plantno')
+
+    if not locno or not plantno:
+        return jsonify({'error': 'Missing locno or plantno parameter'}), 400
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("EXEC dbo.Weather_data @locno=?, @plantno=?", (locno, plantno))
+        columns = [column[0] for column in cursor.description]
+        rows = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        return jsonify(rows)
+    except Exception as e:
+        return jsonify({'error': str(e)})
+    finally:
+        cursor.close()
+        conn.close()
 
 def save_weather_data():
     conn = get_db_connection()
@@ -223,41 +243,10 @@ def save_weather_data():
     conn.close()
     print(f"✅ Inserted {count} weather records.")
 
-
-
-@app.route('/get_weather_by_location', methods=['GET'])
-def get_weather_by_location():
-    locno = request.args.get('locno')
-    plantno = request.args.get('plantno')
-
-    if not locno or not plantno:
-        return jsonify({'error': 'Missing locno or plantno parameter'}), 400
-
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    try:
-        cursor.execute("EXEC dbo.Weather_data @locno=?, @plantno=?", (locno, plantno))
-        columns = [column[0] for column in cursor.description]
-        rows = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        return jsonify(rows)
-    except Exception as e:
-        return jsonify({'error': str(e)})
-    finally:
-        cursor.close()
-        conn.close()
-    
-
-    
-
-
-
-
-# Scheduler to run daily
-# scheduler = BackgroundScheduler()
-# scheduler.add_job(save_weather_data)
-# scheduler.start()
+# Scheduler to run daily at 10:10 AM
+scheduler = BackgroundScheduler()
+scheduler.add_job(save_weather_data, 'cron', hour=10, minute=10)
+scheduler.start()
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=7738)
-
