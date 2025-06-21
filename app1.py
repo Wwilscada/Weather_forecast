@@ -74,9 +74,12 @@ def fetch_weather_data(lat, lon):
             print(f"⚠️ API key failed: {key}")
     raise Exception("❌ All API keys failed.")
 
-@app.route("/")
+@app.route("/", methods=["GET", "HEAD"])
 def home():
+    if request.method == "HEAD":
+        return "", 200  # Just OK for health checks
     return render_template("home.html")
+
 
 @app.route("/dashboard")
 def dashboard():
