@@ -825,8 +825,27 @@
       <button id="closeModalBtn" aria-label="Close detailed forecast">Close</button>
     </div>
   </div>
+</div>
+  {% if states %}
+  {% for state in states %}
+    <h2>{{ state.name }}</h2>
+    {% for date in state.dates %}
+      <div>
+        <strong>{{ date.strftime('%Y-%m-%d') }}</strong>
+        <ul>
+          {% for data in state.weather_data[date] %}
+            <li>
+              Temp: {{ data.temperature }}°C | Humidity: {{ data.humidity }}% | Wind: {{ data.wind_speed }} km/h
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  {% endfor %}
+{% else %}
+  <p>No data available. Please select a state, plant, and location.</p>
+{% endif %}
 
-  
         
       
 
