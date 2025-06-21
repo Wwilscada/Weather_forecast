@@ -928,7 +928,8 @@ const weatherImages = {
 
 window.onload = async () => {
   try {
-    const response = await fetch('/get_hierarchy');
+   fetch('https://your-weather-api.onrender.com/get_hierarchy');
+
     const hierarchy = await response.json();
 
     // Get references to DOM elements
