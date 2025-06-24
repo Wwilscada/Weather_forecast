@@ -4,6 +4,7 @@ import pyodbc
 import requests
 from datetime import datetime, timedelta
 from flask_cors import CORS
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -77,13 +78,11 @@ def fetch_weather_data(lat, lon):
 @app.route("/", methods=["GET", "HEAD"])
 def home():
     if request.method == "HEAD":
-        return "", 200  # Just OK for health checks
+        return "", 200
     return render_template("home.html")
-
 
 @app.route("/dashboard")
 def dashboard():
-    # Dummy context: Replace with actual state data if required
     return render_template("dashboard.html", states=[], state_data={}, dates=[])
 
 @app.route("/view_data")
@@ -177,7 +176,7 @@ def get_hierarchy():
             hierarchy[state][loc] = []
         if plant not in hierarchy[state][loc]:
             hierarchy[state][loc].append(plant)
-    
+
     return jsonify(hierarchy)
 
 @app.route('/get_weather_by_location', methods=['GET'])
@@ -246,10 +245,12 @@ def save_weather_data():
     conn.close()
     print(f"✅ Inserted {count} weather records.")
 
-# Scheduler to run daily at 10:10 AM
+# Background scheduler job at 10:10 AM daily
 scheduler = BackgroundScheduler()
 scheduler.add_job(save_weather_data, 'cron', hour=10, minute=10)
 scheduler.start()
 
+# 🔥 Main entrypoint
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=7738)
+    port = int(os.environ.get("PORT", 7738))  # Use PORT from environment if set
+    app.run(debug=True, host="0.0.0.0", port=port)
